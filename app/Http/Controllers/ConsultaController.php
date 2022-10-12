@@ -13,30 +13,30 @@ class ConsultaController extends Controller
 
       // Regex
         $cpfCNPJ = '/([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/';
-        $CNS = '/(\d{15})/';
+        $CNS = '/^\d{15}$/';
         $noNumber = '/^([^0-9]*)$/';
 
         $numeros; // Declaração da variável fora do escopo do if CPF/CNPJ.
 
       if (preg_match($noNumber, $dado) AND trim($dado)) {
-        return 'nome';
+        return 'Nome: '.$dado;
 
       } elseif (preg_match($CNS, $dado)) {
-        return 'cns';
+        return 'CNS: '.$dado;
 
       } elseif(preg_match($cpfCNPJ, $dado)) {
         $numeros = preg_replace('/[^0-9]/', '', $dado); // Dado sem caracteres especiais
 
         if (strlen($numeros) == 11) {
-          return 'cpf';
+          return 'CPF: '.$numeros;
 
         } elseif (strlen($numeros) == 14) {
-          return 'cnpj';
+          return 'CNPJ: '.$numeros;
         }
 
-      } else {
-        return 'no match';
       }
+      
+      return 'Dado inválido: '.$dado;
 
     } catch (Throwable $th) {
       dd($th);
